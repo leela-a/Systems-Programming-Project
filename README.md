@@ -83,3 +83,15 @@ Its structure makes it easy to add new options without rewriting the whole progr
   - Bash shell (version 4+ recommended)
 
 ---
+
+## How to Run Script
+
+1. Open terminal in Linux, or Ubuntu for Windows WSL
+2. Navigate to desired folder location: *`cd~`*
+3. Clone Github Project: *`git clone https://github.com/leela-a/Systems-Programming-Project.git`*  and navigate to project folder: *`cd Systems-Programming-Project`*
+4. Check for project files/script: *`ls`* to see: *`user_mgmt.sh  README.md`*
+5. Make script executable: *`chmod +x user_mgmt.sh`*
+6. Run script with *sudo*: *`sudo ./user_mgmt.sh`*
+7. Enter *WSL/Linux User Password* when given a prompt: *Menu can now be seen*
+
+---
