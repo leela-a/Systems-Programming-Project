@@ -47,7 +47,13 @@ add_user() {
     read -p "Enter full name: " fullname
 
     # Create user
-    useradd -m -c "$fullname" "$username"
+	if [[ -f default_shell.conf ]]; then
+		 def_shell=$(cat default_shell.conf)
+	 else
+		 def_shell="/bin/bash"
+	 fi
+	 
+	useradd -m -s "$def_shell" -c "$fullname" "$username"
     if [[ $? -ne 0 ]]; then
         echo "Failed to create user."
         pause
@@ -57,7 +63,7 @@ add_user() {
 
     # Secure password prompt and Simple password length check loop
 	while true; do
-    	  read -s -p "Enter password: " password
+    	  read -s -p "Enter password (8 to 12 characters): " password
     	    echo
     	  read -s -p "Confirm password: " password2
     	    echo
@@ -82,6 +88,7 @@ add_user() {
 
     echo "User '$username' created successfully."
     pause
+	log_action "Created user $username"
 }
 
 
@@ -118,6 +125,7 @@ delete_user() {
         echo "Cancelled."
     fi
     pause
+	log_action "Deleted user $username"
 }
 
 
@@ -174,7 +182,7 @@ modify_user() {
 
       	  # Set new password
     	  	while true; do
-	     	   read -s -p "New password (8–12 chars, or 'q' to cancel): " pass1
+	     	   read -s -p "New password (8–12 characters, or 'q' to cancel): " pass1
 	     	   echo
 	      	   read -s -p "Confirm new password: " pass2
 	     	   echo
@@ -237,6 +245,7 @@ modify_user() {
         ;;
     esac
     pause
+	log_action "Modified user $username ($choice)"
 }
 
 
@@ -382,7 +391,14 @@ permission_management() {
     pause
 }
 
+set_default_shell() {
+ read -p "Enter default shell (e.g., /bin/bash): " dshell
+ echo "$dshell" > default_shell.conf
+ echo "Default shell saved."
+ pause
+ }
 
+log_action() { echo "$(date +'%Y-%m-%d %H:%M:%S') - $1" >> /var/log/user_mgmt.log }
 
 # Main Menu
 
@@ -395,7 +411,10 @@ while true; do
     echo "2) Delete user"
     echo "3) Modify user"
     echo "4) List users"
-    echo "5) Exit"
+	echo "5) Group management"
+	echo "6) Permission management"
+	echo "7) Set default shell"
+    echo "8) Exit"
     echo "                              "
 
     read -p "Choose an option: " option
@@ -405,7 +424,10 @@ while true; do
         2) delete_user ;;
         3) modify_user ;;
         4) list_users ;;
-        5) echo "Exiting..."; exit 0 ;;
+		5) group_management ;;
+		6) permission_management ;;
+		7) set_default_shell ;;
+        8) echo "Exiting..."; exit 0 ;;
         *) echo "Invalid option"; pause ;;
     esac
 done
