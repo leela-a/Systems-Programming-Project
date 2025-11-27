@@ -250,6 +250,139 @@ list_users() {
     pause
 }
 
+group_management() {
+    echo " "
+    echo "---- Group Management ----"
+    echo " "
+    echo "1) Create new group"
+    echo "2) Add user to group"
+    echo "3) List all groups"
+    echo "4) Cancel"
+    read -p "Choose an option: " gopt
+
+    case $gopt in
+        1)
+            read -p "Enter group name (or 'q' to cancel): " gname
+            [[ "$gname" == "q" ]] && echo "Cancelled." && pause && return
+
+            if getent group "$gname" >/dev/null; then
+                echo "Group '$gname' already exists."
+            else
+                if groupadd "$gname"; then
+                    echo "Group '$gname' created."
+                else
+                    echo "Failed to create group '$gname'."
+                fi
+            fi
+            ;;
+
+        2)
+            read -p "Enter username: " uname
+            uname=$(echo "$uname" | tr 'A-Z' 'a-z')
+            read -p "Enter group name: " gname
+
+            if ! id "$uname" &>/dev/null; then
+                echo "User '$uname' does not exist."
+            elif ! getent group "$gname" >/dev/null; then
+                echo "Group '$gname' does not exist."
+            else
+                if usermod -aG "$gname" "$uname"; then
+                    echo "Added '$uname' to group '$gname'."
+                else
+                    echo "Failed to add '$uname' to '$gname'."
+                fi
+            fi
+            ;;
+
+        3)
+            echo "---- Groups on System ----"
+            cut -d: -f1 /etc/group
+            ;;
+
+        4)
+            echo "Cancelled."
+            ;;
+
+        *)
+            echo "Invalid option."
+            ;;
+    esac
+
+    pause
+}
+
+permission_management() {
+    echo " "
+    echo "---- Permission Management ----"
+    echo " "
+    echo "1) Change file permissions (chmod)"
+    echo "2) Change file owner (chown)"
+    echo "3) Cancel"
+    read -p "Choose an option: " popt
+
+    case $popt in
+        1)
+            read -p "Enter file path: " path
+
+            if [[ ! -e "$path" ]]; then
+                echo "File '$path' does not exist."
+                pause
+                return
+            fi
+
+            read -p "Enter permission (e.g., 755): " perms
+
+            if [[ ! "$perms" =~ ^[0-7]{3,4}$ ]]; then
+                echo "Invalid permission format. Use numeric modes like 644, 755, 0700."
+                pause
+                return
+            fi
+
+            if chmod "$perms" "$path"; then
+                echo "Permissions updated successfully."
+            else
+                echo "Failed to update permissions."
+            fi
+            ;;
+
+        2)
+            read -p "Enter file path: " path
+
+            if [[ ! -e "$path" ]]; then
+                echo "File '$path' does not exist."
+                pause
+                return
+            fi
+
+            read -p "Enter new owner username: " uname
+            uname=$(echo "$uname" | tr 'A-Z' 'a-z')
+
+            if ! id "$uname" &>/dev/null; then
+                echo "User '$uname' does not exist."
+                pause
+                return
+            fi
+
+            if chown "$uname" "$path"; then
+                echo "Owner updated successfully."
+            else
+                echo "Failed to update owner."
+            fi
+            ;;
+
+        3)
+            echo "Cancelled."
+            ;;
+
+        *)
+            echo "Invalid option."
+            ;;
+    esac
+
+    pause
+}
+
+
 
 # Main Menu
 
