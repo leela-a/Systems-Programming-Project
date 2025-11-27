@@ -1,3 +1,11 @@
+# Show users with UID >= 1000 (normal accounts)
+    awk -F: '$3 >= 1000 { print $1 }' /etc/passwd
+
+    echo "---- Groups You Created ----"
+    awk -F: '$3 >= 1000 { print $1 }' /etc/group
+    ;;
+    
+
 #!/bin/bash
 
 # ============================================================
