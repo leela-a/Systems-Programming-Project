@@ -3,7 +3,7 @@
 **CRN44209 - Group 4**   
 *Abdul Aziz Syed - 100792709*   
 *Leela Alagala - 100913874*   
-*Hannah Albi -*   
+*Hannah Albi - 100821689*   
 
 This project contains a Bash script that works as a simple user-management tool in the Linux operating system (OS).  
 The requirement/goal was to build a script/system that feels easy to use, while also still completing the main tasks a system administrator needs to do.  
