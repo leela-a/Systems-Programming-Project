@@ -1,10 +1,15 @@
-# Show users with UID >= 1000 (normal accounts)
-    awk -F: '$3 >= 1000 { print $1 }' /etc/passwd
+echo 
+echo " USER ACCOUNT MANAGEMENT SCRIPT "
+echo 
+echo " This script allows an administrator to:"
+echo "  - Add, delete or modify system users"
+echo "  - Manage groups"
+echo "  - Change file permissions"
+echo "  - Set a default shell"
+echo "  - List only custom-created users and groups"
 
-    echo "---- Groups You Created ----"
-    awk -F: '$3 >= 1000 { print $1 }' /etc/group
-    ;;
-    
+pause
+
 
 #!/bin/bash
 
