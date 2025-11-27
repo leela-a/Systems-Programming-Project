@@ -2,7 +2,7 @@
 ## Final Project: User Account Management Script   
 **CRN44209 - Group 4**   
 *Abdul Aziz Syed - 100792709*   
-*Leela Alagala -*   
+*Leela Alagala - 100913874*   
 *Hannah Albi -*   
 
 This project contains a Bash script that works as a simple user-management tool in the Linux operating system (OS).  
