@@ -10,6 +10,8 @@ if [[ $EUID -ne 0 ]]; then
     exit 1
 fi
 
+pause
+
 # Pause helper
 pause() {
     read -p "Press Enter to continue..."
@@ -20,9 +22,8 @@ log_action() {
     echo "$(date +'%Y-%m-%d %H:%M:%S') - $1" >> /var/log/user_mgmt.log
 }
 
-# ------------------------------------------------------------
 # ADD USER
-# ------------------------------------------------------------
+
 add_user() {
     echo
     echo "---- Add New User ----"
@@ -85,9 +86,8 @@ add_user() {
     pause
 }
 
-# ------------------------------------------------------------
 # DELETE USER
-# ------------------------------------------------------------
+
 delete_user() {
     echo
     echo "---- Delete User ----"
@@ -120,9 +120,8 @@ delete_user() {
     pause
 }
 
-# ------------------------------------------------------------
 # MODIFY USER
-# ------------------------------------------------------------
+
 modify_user() {
     echo
     echo "---- Modify User ----"
@@ -218,20 +217,22 @@ modify_user() {
     pause
 }
 
-# ------------------------------------------------------------
+
 # LIST USERS
-# ------------------------------------------------------------
+
 list_users() {
     echo
-    echo "---- System Users ----"
+    echo "---- Users Created ----"
     echo
-    cat /etc/passwd
+    
+    # Show users with UID >= 1000 (normal accounts)
+    awk -F: '$3 >= 1000 { print $1 }' /etc/passwd
+    
     pause
 }
 
-# ------------------------------------------------------------
 # GROUP MANAGEMENT
-# ------------------------------------------------------------
+
 group_management() {
     echo
     echo "---- Group Management ----"
@@ -272,8 +273,9 @@ group_management() {
             ;;
 
         3)
-            cut -d: -f1 /etc/group
-            ;;
+            echo "---- Groups You Created ----"
+	    awk -F: '$3 >= 1000 { print $1 }' /etc/group
+	    ;;
 
         4)
             echo "Cancelled."
@@ -287,9 +289,9 @@ group_management() {
     pause
 }
 
-# ------------------------------------------------------------
+
 # PERMISSION MANAGEMENT
-# ------------------------------------------------------------
+
 permission_management() {
     echo
     echo "---- Permission Management ----"
@@ -341,9 +343,9 @@ permission_management() {
     pause
 }
 
-# ------------------------------------------------------------
+
 # SET DEFAULT SHELL
-# ------------------------------------------------------------
+
 set_default_shell() {
     read -p "Enter default shell (e.g., /bin/bash): " dshell
 
@@ -358,13 +360,13 @@ set_default_shell() {
     pause
 }
 
-# ------------------------------------------------------------
+
 # MAIN MENU LOOP
-# ------------------------------------------------------------
+
 while true; do
     clear
     echo
-    echo "   USER ACCOUNT MANAGEMENT"
+    echo "   USER ACCOUNT MANAGEMENT  "
     echo
     echo "1) Add user"
     echo "2) Delete user"
