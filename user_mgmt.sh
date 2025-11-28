@@ -19,7 +19,7 @@ pause() {
 
 # Logging
 log_action() {
-    echo "$(date +'%Y-%m-%d %H:%M:%S') - $1" >> /var/log/user_mgmt.log
+    echo "$(date +'%Y-%m-%d %H:%M:%S') - $1" >> /tmp/user_mgmt.log;
 }
 
 # ADD USER
